@@ -43,7 +43,7 @@ public class MyBigNumber {
             }
 
             logger.info(stepLog.toString());
-            result.insert(0, saveDigit);
+            result.append(saveDigit);
             
             carry = newCarry;
             step++;
@@ -51,9 +51,66 @@ public class MyBigNumber {
 
         if (carry > 0) {
             logger.info("Step " + step + ": Save carry " + carry + ". ");
-            result.insert(0, carry);
+            result.append(carry);
         }
-        String finalSum = result.toString();
+        String finalSum = result.reverse().toString();
+        logger.info("Result: " + finalSum + "\n--------------------"); 
+        
+        return finalSum;
+    }
+
+    public String sum2(String stn1, String stn2) {
+        logger.info("Calc: " + stn1 + " + " + stn2);
+
+        StringBuilder result = new StringBuilder();
+        
+        int length1 = stn1.length();
+        int length2 = stn2.length();
+        int maxLen = Math.max(length1, length2);
+        
+        int carry = 0; 
+        int step = 1;  
+        int d1, d2, tempSum, totalSum, saveDigit, newCarry;
+        
+        StringBuilder stepLog = new StringBuilder();
+
+        for (int i = 0; i < maxLen; i++) {
+            d1 = i < length1 ? stn1.charAt(length1 - 1 - i) - '0' : 0;
+            d2 = i < length2 ? stn2.charAt(length2 - 1 - i) - '0' : 0;
+
+            tempSum = d1 + d2;
+            totalSum = tempSum + carry;
+            
+            saveDigit = totalSum % 10;
+            newCarry = totalSum / 10;
+
+            stepLog.setLength(0);
+            stepLog.append("Step ").append(step).append(": ");
+            stepLog.append(d1).append(" plus ").append(d2).append(" is ").append(tempSum).append(". ");
+
+            if (carry > 0) {
+                stepLog.append("Plus the carry ").append(carry).append(" is ").append(totalSum).append(". ");
+            }
+
+            stepLog.append("Save ").append(saveDigit).append(" to result");
+            if (newCarry > 0) {
+                stepLog.append(" and carry ").append(newCarry).append(".");
+            } else {
+                stepLog.append(".");
+            }
+
+            logger.info(stepLog.toString());
+            result.append(saveDigit);
+            
+            carry = newCarry;
+            step++;
+        }
+
+        if (carry > 0) {
+            logger.info("Step " + step + ": Save carry " + carry + ". ");
+            result.append(carry);
+        }
+        String finalSum = result.reverse().toString();
         logger.info("Result: " + finalSum + "\n--------------------"); 
         
         return finalSum;
